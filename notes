@@ -1,0 +1,3 @@
+2 decimal points
+
+print(%0.2f' %(whatever your actual output))
