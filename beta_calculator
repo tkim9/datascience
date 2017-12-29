@@ -1,0 +1,34 @@
+# This is the beta calculater function for python
+# copy and past all to your python
+# type at the end:
+# beta(your company's ticker, benchmark ticker, start date as MM/DD/YYYY form, end date with same form)
+# so 4 values total
+
+
+
+from pandas_datareader import data, wb
+import pandas as pd
+import numpy as np
+import datetime
+import matplotlib.pyplot as plt
+%matplotlib inline
+from sklearn.linear_model import LinearRegression
+lm = LinearRegression()
+
+def beta(ticker, benchmark, start, end):
+    df = data.DataReader(ticker, 'yahoo', start, end)
+    bm = data.DataReader(benchmark, 'yahoo', start, end)
+    df['comp_ret'] = df['Adj Close'].pct_change()
+    df['bm_ret'] = bm['Adj Close'].pct_change()
+    df.dropna(inplace = True)
+    lm.fit(np.array(df['bm_ret']).reshape(-1, 1), np.array(df['comp_ret']).reshape(-1, 1))
+    x1 = print('Coefficent :', lm.coef_)
+    x2 = plt.scatter(df['bm_ret'], df['comp_ret'])
+    plt.xlabel(benchmark)
+    plt.ylabel(ticker)
+    return(x1, x2) 
+    
+# Only fill in below.     
+# EX: beta('AAPL', 'SPY', '01/01/2010', '01/01/2016')
+
+beta()
