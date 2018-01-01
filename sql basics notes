@@ -1,0 +1,156 @@
+### Lecture notes from SQL BOOTCAMP by Jose Portilla ###
+
+
+# SELECT
+
+SELECT columnname, columnname, FROM tablename;          # SELECT * FROM tablename    :  will return every column
+
+
+# DISTINCT
+
+SELECT DISTINCT columname FROM film;       # it gets the unique values in the column -> similar to python's df['column'].unique()
+
+
+# SELECT WHERE
+
+SELECT column_1, column_2,....
+FROM table_name
+WHERE conditions;      # using operators like =, >, <, >=, !=(not equal)
+
+EX.
+SELECT last_name, first_name
+FROM customer
+WHERE first_name = 'Jamie' AND last_name = 'Rice';
+
+EX.2  (conditions can be in other columns than one in select)
+SELECT email
+FROM customer
+WHERE first_name = 'Jared';
+
+
+# COUNT Statement
+- COUNT(*) function returns the number of rows returned by a SELECT clause
+- When you apply the COUNT(*) to the entire table, PostgreSQL scans table sequentially
+- does not consider null value
+
+SELECT COUNT(DISTINCT column)
+FROM table;
+
+EX. counts the number of rows
+SELECT COUNT(*)
+FROM payment;
+
+EX. counts the number of unique values in amount
+SELECT COUNT(DISTINCT amount)
+FROM payment;
+
+
+# LIMIT
+- allows you to limit the number of rows
+- useful when you have a very big data
+
+EX. same as df.head(5) in python
+SELECT *
+FROM customer
+LIMIT 5;
+
+
+# ORDER BY Statement
+- allows you to sort the rows returned from the SELECT statement in ascending or descending order based on critieria
+- ASC is ascending and DESC is descending. Default: Ascending
+
+SELECT column_1, column_2
+FROM table_name
+ORDER BY column_1 ASC/DESC;
+
+EX.
+SELECT first_name, last_name
+FROM customer
+ORDER BY first_name ASC;
+
+EX. Sort by multiple columns
+SELECT first_name, last_name
+FROM customer
+ORDER BY last_name ASC,
+last_name DESC;
+
+EX. Sort by different columns outside of select   
+-> available in PostgreSQL but may not be available in other softwares so try to include columns that you want to sort by
+SELECT first_name
+FROM customer
+ORDER BY last_name ASC;
+
+
+# Between
+- low <= value <=high
+- you can do it with just operators but it becomes readable
+- NOT BETWEEN: < low and > high
+
+EX.
+SELECT customer_id, amount
+FROM payment
+WHERE amount BETWEEN 8 AND 9;
+
+EX.
+SELECT customer_id, amount
+FROM payment
+WHERE amount NOT BETWEEN 8 AND 9;
+
+
+# IN Statement
+- value IN (value1, value2 .... )
+- value IN (SELECT value FROM tbl_name)       # you can also use set of select statement
+
+
+EX. trying to look at customer 1 and 2
+SELECT customer_id, rental_id, return_date
+FROM rental
+WHERE customer_id IN (1,2)
+ORDER BY return_date DESC;
+
+EX. NOT IN
+SELECT customer_id, rental_id, return_date
+FROM rental
+WHERE customer_id NOT IN (1,2)
+ORDER BY return_date DESC;
+
+- basically bunch of OR Statement, so I can re-write as:
+SELECT customer_id, rental_id, return_date
+FROM rental
+WHERE customer_id = 1
+OR customer_id = 2;
+
+
+# LIKE Statement
+- use to look for similar pattern
+
+SELECT first_name, last_name
+FROM customer
+WHERE first_name LIKE 'Jen%';        # % refers to pattern
+
+wild card characters: % (for any sequence of characters), _ (for matching any single character)
+
+EX. All names ending in Y
+SELECT first_name, last_name
+FROM customer
+WHERE first_name LIKE '%y';
+
+EX. any name that has 'er' in their name
+SELECT first_name, last_name
+FROM customer
+WHERE first_name LIKE '%er%';
+
+EX. underscore example: looking up one character + 'her' + any other characterS 
+SELECT first_name, last_name
+FROM customer
+WHERE first_name LIKE '_her
+
+EX. NOT LIKE: anything except you would get when you say LIKE
+SELECT first_name, last_name
+FROM customer
+WHERE first_name NOT LIKE 'Jen%';
+
+EX. ILIKE Statement: same as LIKE but case insensitive
+SELECT first_name, last_name
+FROM customer
+WHERE first_name ILIKE 'BaR%';
