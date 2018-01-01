@@ -1,0 +1,66 @@
+# MIN MAX SUM and AVG Statment
+
+- AVG
+SELECT AVG(amount)
+FROM payment;           # ROUND(AVG(amount), 2) -> round to 2 decimals
+
+SELECT ROUND(AVG(amount),2)
+FROM payment;
+
+- MIN, MAX, SUM
+SELECT MIN(amount) 
+FROM payment;
+
+
+# GROUP BY 
+
+- syntax
+SELECT column_1, aggregate_function(column_2)
+FROM table_name
+GROUP BY column_1;
+
+EX. want to group by unique customers and sum it up
+SELECT customer_id, SUM(amount)
+FROM payment
+GROUP BY customer_id;
+
+EX. Grouping by staff_id and counting payment_ids on each staff_id
+SELECT staff_id, COUNT(payment_id)        # COUNT(*) will give same because it is eventually counting number of rows
+FROM payment
+GROUP BY staff_id;
+
+EX. How many per each ratings
+SELECT rating, COUNT(rating) 
+FROM film
+GROUP BY rating;
+
+EX. average rental rates according to rating
+SELECT rating, ROUND(AVG(rental_rate),2)
+FROM film
+GROUP BY rating;
+
+
+# Having Statement
+-syntax
+SELECT column_1, aggregate_function(column_2)
+FROM table_name
+GROUP BY column_1
+HAVING condition;
+
+-difference between HAVING and WHERE
+WHERE: applies condition before GROUP BY clause applies
+HAVIN: applies after group rows has been created   ->  filters out after group by is applied
+
+EX. 
+SELECT customer_id, SUM(amount)
+FROM payment
+GROUP BY customer_id
+HAVING SUM(amount) > 200 ;
+
+EX.
+SELECT rating, AVG(rental_rate) 
+FROM film
+GROUP BY rating
+HAVING rating IN ('R', 'G', 'PG') AND AVG(rental_rate) < 3;
+
+
