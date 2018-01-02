@@ -1,0 +1,83 @@
+# AS Statement
+
+EX. Returns payment_id column with new column name 'my_payment_column'
+SELECT payment_id AS my_payment_column
+FROM payment;
+
+EX.
+SELECT customer_id, SUM(amount) AS total_spent
+FROM payment
+GROUP BY (customer_id);
+
+Note that there is no '' so it is like writing existing columns
+
+
+# JOINS Overview
+- used to join tables
+- inner join syntax, pka: primary key for a table
+- you can use JOIN instead of INNER JOIN
+
+SELECT A.pka, A.c1, B.pkb, B.c2
+FROM A                                       
+INNER JOIN B ON A.pka = B.fka
+-> A is the primary table and is addion on table B
+
+EX.
+SELECT customer.customer_id, first_name, last_name, email, amount, payment_date     # amount is in payment table but sql will know.
+FROM customer
+INNER JOIN payment ON payment.customer_id = customer.customer_id
+ORDER BY customer.customer_id;
+
+EX. shows how many copies of each title is at store1
+SELECT title, COUNT(title) AS copies_at_store1
+FROM inventory
+INNER JOIN film ON inventory.film_id = film.film_id
+WHERE store_id = 1
+GROUP BY title;
+
+EX. use of AS Statement on inner join
+SELECT title, language.name AS movie_language
+FROM film
+INNER JOIN language AS lan ON film.language_id = lan.language_id;
+
+
+# Outer Join
+-FULL OUTER JOIN
+get everything of tableA or tableB regardless of they are matching or not
+-Syntax
+SELECT * 
+FROM tableA
+FULL OUTER JOIN tableB ON TableA.name = TableB.name
+
+-LEFT OUTER JOIN
+you will get everything for tableA but get only matchings on tableB
+so no null value on tableB.
+-syntax
+SELECT * 
+FROM tableA
+LEFT OUTER JOIN tableB ON TableA.name = TableB.name
+
+-Left OUTER JOIN with WHERE 
+used to get only A - A&B, so exclusively A
+-syntax
+SELECT * 
+FROM tableA
+LEFT OUTER JOIN tableB ON TableA.name = TableB.name
+WHERE TableB.id IS null
+
+EX.
+SELECT film.film_id, film.title, inventory_id
+FROM film
+LEFT OUTER JOIN inventory ON inventory.film_id = film.film_id 
+WHERE inventory.film_id is NULL;
+
+-FULL OUTER JOIN with WHERE
+AUB - A&B
+-syntax
+SELECT * 
+FROM tableA
+LEFT OUTER JOIN tableB ON TableA.name = TableB.name
+WHERE TableB.id IS null OR TableA.id IS null
+
+* LEFT OUTER JOIN can be simply written as LEFT JOIN
+
