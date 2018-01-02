@@ -81,3 +81,20 @@ WHERE TableB.id IS null OR TableA.id IS null
 
 * LEFT OUTER JOIN can be simply written as LEFT JOIN
 
+
+# UNION Statement
+it will combine two tables but delete duplicate row (meaning every single column in that row is same)
+-syntax
+SELECT column_1, column_2
+FROM tbl_name_1
+UNION
+SELECT column_1, column_2
+FROM tbl_name_2;
+
+-requirements
+Both queries must return the same number of columns
+The corresponding columns in the queries must have compatible data types
+
+
+
+
