@@ -1,0 +1,72 @@
+# Timestamp
+-syntax may vary depending on the software
+-link: https://www.postgresql.org/docs/10/static/functions-datetime.html
+
+EX. extracting days from timestamp
+SELECT extract(day from payment_date)              
+FROM payment;
+
+EX. making monthly data
+SELECT SUM(amount), extract(month from payment_date) AS Month
+FROM payment
+GROUP BY month
+ORDER BY SUM(amount) ;
+
+
+# Mathematical Functions
+link: https://www.postgresql.org/docs/9.5/static/functions-math.html
+
+EX. sum of the two
+SELECT customer_id + rental_id AS new_id
+FROM payment
+
+
+# String functions
+link: https://www.postgresql.org/docs/9.1/static/functions-string.html
+
+EX. concatenating first and last name
+SELECT first_name || ' ' || last_name AS full_name
+FROM customer;
+
+EX. counting number of characters
+SELECT first_name, char_length(first_name)
+FROM customer;
+
+EX. capitalize everything
+SELECT upper(first_name)            # lower for all lower cases
+FROM customer;
+
+
+# Subquery
+- Suppose we want to find the films whose rental rate is higher than the average rental rate.
+
+EX. without subquery
+SELECT AVG(rental_rate)
+FROM film
+
+output: 2.98
+so
+SELECT title, rental_rate
+FROM film
+WHERE rental_rate > 2.98                   # you cannot use aggregate functions in WHERE
+
+EX. using subquery
+SELECT film_id, title, rental_rate 
+FROM film
+WHERE rental_rate > (SELECT AVG(rental_rate) FROM film);        # so use aggregate function using (select statement)
+
+EX. different exercise. getting film_id of those returned between 5/29 to 5/30
+SELECT inventory.film_id
+FROM rental
+INNER JOIN inventory ON inventory.inventory_id = rental.inventory_id
+WHERE return_date BETWEEN '2005-05-29' AND '2005-05-30' ;
+
+EX. with subquery. getting film_id info of above
+SELECT film_id, title
+FROM film
+WHERE film_id IN
+
+(SELECT inventory.film_id
+FROM rental
+INNER JOIN inventory ON inventory.inventory_id = rental.inventory_id
+WHERE return_date BETWEEN '2005-05-29' AND '2005-05-30');              # giant subquery () all becomes the list
