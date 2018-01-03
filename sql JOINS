@@ -13,6 +13,7 @@ Note that there is no '' so it is like writing existing columns
 
 
 # JOINS Overview
+- useful link: https://blog.codinghorror.com/a-visual-explanation-of-sql-joins/
 - used to join tables
 - inner join syntax, pka: primary key for a table
 - you can use JOIN instead of INNER JOIN
